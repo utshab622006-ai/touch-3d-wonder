@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, ArrowUpRight, Box, Code2, Github, Mail, Menu, Send, Sparkles, Zap } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { CursorTrail } from "./CursorTrail";
 import { InteractiveScene } from "./InteractiveScene";
 
@@ -19,6 +19,7 @@ const works = [
 
 export function PortfolioPage() {
   const heroRef = useRef<HTMLElement>(null);
+  const [titleTilt, setTitleTilt] = useState({ x: 0, y: 0 });
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const titleY = useTransform(scrollYProgress, [0, 1], [0, 150]);
   const titleOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
@@ -37,17 +38,38 @@ export function PortfolioPage() {
         </div>
       </header>
 
-      <section id="top" ref={heroRef} className="relative min-h-[105svh] touch-pan-y">
+      <section
+        id="top"
+        ref={heroRef}
+        className="relative min-h-[105svh] touch-pan-y"
+        onPointerMove={(event) => {
+          const bounds = event.currentTarget.getBoundingClientRect();
+          setTitleTilt({
+            x: ((event.clientX - bounds.left) / bounds.width - 0.5) * 8,
+            y: ((event.clientY - bounds.top) / bounds.height - 0.5) * -8,
+          });
+        }}
+        onPointerLeave={() => setTitleTilt({ x: 0, y: 0 })}
+      >
         <div className="absolute inset-0"><InteractiveScene /></div>
         <div className="hero-shade absolute inset-0 pointer-events-none" />
-        <motion.div style={{ y: titleY, opacity: titleOpacity }} className="pointer-events-none absolute inset-x-0 top-[17svh] z-10 mx-auto flex max-w-7xl flex-col items-center px-6 text-center">
-          <p className="eyebrow mb-5">Independent 3D art & interactive studio</p>
-          <h1 className="font-display text-[clamp(3.35rem,10vw,9rem)] font-extrabold uppercase leading-[0.82] tracking-normal">
-            Mewo<br /><span className="text-stroke">Studios</span>
-          </h1>
-          <p className="mt-7 max-w-xl text-sm leading-6 text-muted-foreground md:text-base">
-            3D product visualization & game-ready asset artistry, engineered for impact in stills, motion, and real-time worlds.
-          </p>
+        <motion.div
+          style={{ y: titleY, opacity: titleOpacity }}
+          className="pointer-events-none absolute inset-x-0 top-[14svh] z-10 mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)] px-5 md:top-[19svh] md:grid-cols-[minmax(0,0.98fr)_minmax(27rem,0.82fr)] md:px-10"
+        >
+          <motion.div
+            animate={{ rotateX: titleTilt.y, rotateY: titleTilt.x }}
+            transition={{ type: "spring", stiffness: 120, damping: 18, mass: 0.6 }}
+            className="hero-copy min-w-0 md:col-start-2"
+          >
+            <p className="eyebrow mb-5">Independent 3D art & interactive studio</p>
+            <h1 className="hero-title font-display font-extrabold uppercase tracking-normal">
+              Mewo<br /><span className="text-stroke">Studios</span>
+            </h1>
+            <p className="mt-7 max-w-md text-sm leading-6 text-muted-foreground md:ml-auto md:text-base">
+              3D product visualization & game-ready asset artistry, engineered for impact in stills, motion, and real-time worlds.
+            </p>
+          </motion.div>
         </motion.div>
         <div className="absolute bottom-8 left-5 z-20 hidden items-center gap-3 text-xs uppercase text-muted-foreground md:flex md:left-10">
           <span className="status-dot" /> Available for selected projects

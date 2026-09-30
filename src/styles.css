@@ -215,9 +215,39 @@
   letter-spacing: 0.14em;
 }
 
+@utility hero-copy {
+  transform-style: preserve-3d;
+  text-align: right;
+  filter: drop-shadow(0 1rem 2.5rem color-mix(in oklab, var(--background) 72%, transparent));
+  @media (max-width: 767px) {
+    margin-left: auto;
+    width: min(88vw, 22rem);
+  }
+}
+
+@utility hero-title {
+  font-size: clamp(3.2rem, 8.6vw, 8rem);
+  line-height: 0.8;
+  text-wrap: balance;
+  text-shadow: 0 0 2.5rem color-mix(in oklab, var(--primary) 12%, transparent);
+  transition: text-shadow 220ms ease, filter 220ms ease;
+  .hero-copy:hover & {
+    text-shadow: 0 0 1.3rem color-mix(in oklab, var(--primary) 26%, transparent), 0 0 3.5rem color-mix(in oklab, var(--accent) 16%, transparent);
+    filter: saturate(1.18);
+  }
+  @media (max-width: 767px) {
+    font-size: clamp(3rem, 18vw, 5.3rem);
+  }
+}
+
 @utility text-stroke {
   color: transparent;
   -webkit-text-stroke: 1px color-mix(in oklab, var(--foreground) 62%, transparent);
+  transition: color 220ms ease, -webkit-text-stroke-color 220ms ease;
+  .hero-copy:hover & {
+    color: color-mix(in oklab, var(--background) 80%, transparent);
+    -webkit-text-stroke-color: var(--primary);
+  }
 }
 
 @utility text-stroke-accent {
