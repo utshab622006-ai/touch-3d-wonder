@@ -152,7 +152,7 @@ function Scene({ weather, zone, onSelect, yaw }: { weather: Weather; zone: numbe
         <circleGeometry args={[20, 12]} />
         <meshStandardMaterial color={p.ground} flatShading roughness={1} />
       </mesh>
-      <mesh position={[0, -1.1, 0]}>
+      <mesh position={[0, -1.13, 0]}>
         <cylinderGeometry args={[20, 16, 2.2, 12]} />
         <meshStandardMaterial color="#7a5a3c" flatShading />
       </mesh>
