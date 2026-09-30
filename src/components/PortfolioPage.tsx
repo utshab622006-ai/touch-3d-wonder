@@ -1,15 +1,8 @@
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { ArrowUpRight, CloudRain, Facebook, Github, Instagram, Mail, Menu, MessageCircle, Moon, Music2, Send, Sun, Sunset, X, Youtube } from "lucide-react";
+import { ArrowUpRight, Facebook, Github, Instagram, Mail, Menu, MessageCircle, Music2, Send, X, Youtube } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { CursorTrail } from "./CursorTrail";
-import { VillageWorld, ZONES, type Weather } from "./VillageWorld";
-
-const WEATHERS: { id: Weather; label: string; icon: typeof Sun }[] = [
-  { id: "day", label: "Day", icon: Sun },
-  { id: "sunset", label: "Golden hour", icon: Sunset },
-  { id: "night", label: "Night", icon: Moon },
-  { id: "rain", label: "Rain", icon: CloudRain },
-];
+import { VillageWorld, ZONES, type Phase } from "./VillageWorld";
 
 const socials = [
   { icon: Mail, label: "Email", href: "mailto:hello@mewostudios.com" },
@@ -23,14 +16,15 @@ const socials = [
 ];
 
 const CONTENT = [
-  { tag: "Entrance", title: "Welcome to Mewo City", body: "3D Product Visualization & Game-Ready Asset Artistry | Unity Game Developer. Scroll, drag, or tap a building to explore.", points: ["Blender · Unity · C#", "Stills, motion & real-time", "Desktop and mobile friendly"] },
-  { tag: "Village 01", title: "Product Viz Haven", body: "High-end product renders, ad animations, and photoreal 3D models crafted with studio-grade lighting and materials.", points: ["Fast 1-day turnaround lane", "Repeat client loyalty discount", "Ad-ready motion loops"] },
-  { tag: "Village 02", title: "Game Dev & Unity Alley", body: "Game-ready props with clean topology, efficient UVs, wireframe previews, and C# Unity gameplay mechanics.", points: ["360° inspectable models", "Wireframe & texel-density previews", "Unity gameplay prototypes"] },
-  { tag: "Village 03", title: "Contact & Social Square", body: "Pick a channel and let's build something real together.", points: [] },
+  { tag: "Entrance", title: "Welcome to Mewo Valley", body: "3D Product Visualization & Game-Ready Asset Artistry | Unity Game Developer. Scroll, drag, or tap a market building to explore.", points: ["Blender · Unity · C#", "Stills, motion & real-time", "Desktop and mobile friendly"] },
+  { tag: "Market 01", title: "3D Product Visualization Market", body: "High-end product renders, ad animations, and photoreal 3D models crafted with studio-grade lighting and materials.", points: ["Fast 1-day turnaround lane", "Repeat client loyalty discount", "Ad-ready motion loops"] },
+  { tag: "Market 02", title: "Game Asset Mall", body: "Game-ready props and environments with clean topology, efficient UVs, and wireframe previews.", points: ["360° inspectable models", "Wireframe & texel-density previews", "PBR texture sets"] },
+  { tag: "Market 03", title: "Unity C# Arcade Hub", body: "Interactive Unity prototypes and C# gameplay mechanics — from controllers to full game loops.", points: ["Gameplay systems in C#", "Playable prototypes", "Performance-tuned builds"] },
+  { tag: "Square", title: "Post & Social Square", body: "Pick a channel and let's build something real together.", points: [] },
 ];
 
 export function PortfolioPage() {
-  const [weather, setWeather] = useState<Weather>("day");
+  const [phase, setPhase] = useState<Phase>("Day");
   const [zone, setZone] = useState(0);
   const [modal, setModal] = useState<number | null>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
@@ -48,7 +42,7 @@ export function PortfolioPage() {
     window.scrollTo({ top: el.offsetTop + (max * (i + 0.5)) / ZONES.length, behavior: "smooth" });
   };
 
-  useEffect(() => { if (window.location.hash === "#contact") goTo(3); }, []);
+  useEffect(() => { if (window.location.hash === "#contact") goTo(4); }, []);
 
   const c = CONTENT[zone]!;
 
@@ -56,7 +50,7 @@ export function PortfolioPage() {
     <main className="bg-background text-foreground">
       <CursorTrail />
       <div className="village-canvas fixed inset-0">
-        <VillageWorld weather={weather} zone={zone} onSelect={(i) => { goTo(i); setModal(i); }} />
+        <VillageWorld zone={zone} selected={modal} onPhase={setPhase} onSelect={(i) => { goTo(i); setModal(i); }} />
       </div>
       <div className="pointer-events-none fixed inset-0 village-vignette" />
 
@@ -66,7 +60,7 @@ export function PortfolioPage() {
           <span className="font-display text-sm font-bold uppercase tracking-[0.16em]">Mewo Studios</span>
         </button>
         <div className="flex items-center gap-3">
-          <button onClick={() => { goTo(3); setModal(3); }} className="nav-cta">Start a project <ArrowUpRight size={15} /></button>
+          <button onClick={() => { goTo(4); setModal(4); }} className="nav-cta">Start a project <ArrowUpRight size={15} /></button>
           <button onClick={() => setModal(zone)} className="icon-control" aria-label="Open zone details"><Menu size={18} /></button>
         </div>
       </header>
@@ -101,15 +95,9 @@ export function PortfolioPage() {
         </motion.aside>
       </AnimatePresence>
 
-      {/* Weather + zone nav */}
-      <div className="glass fixed bottom-5 left-1/2 z-30 flex -translate-x-1/2 items-center gap-1 p-1.5 md:bottom-10 md:left-10 md:translate-x-0">
-        {WEATHERS.map((w) => (
-          <button key={w.id} onClick={() => setWeather(w.id)} aria-label={w.label} title={w.label}
-            className={`weather-btn ${weather === w.id ? "is-active" : ""}`}>
-            <w.icon size={16} />
-          </button>
-        ))}
-        <button onClick={() => setWeather(WEATHERS[(WEATHERS.findIndex((w) => w.id === weather) + 1) % 4]!.id)} className="weather-btn text-[10px] font-bold uppercase">Cycle</button>
+      {/* Auto time-of-day indicator */}
+      <div className="glass fixed bottom-5 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] md:bottom-10 md:left-10 md:translate-x-0">
+        <span className="status-dot" /> {phase}
       </div>
       <nav className="fixed left-5 top-1/2 z-30 hidden -translate-y-1/2 flex-col gap-3 md:left-10 md:flex">
         {CONTENT.map((z, i) => (
@@ -132,7 +120,7 @@ export function PortfolioPage() {
                   {CONTENT[modal]!.points.map((p) => <li key={p} className="flex items-center gap-3 text-sm"><span className="status-dot" />{p}</li>)}
                 </ul>
               )}
-              {modal === 3 && (
+              {modal === 4 && (
                 <div className="mt-6 grid grid-cols-4 gap-3">
                   {socials.map((s) => (
                     <a key={s.label} href={s.href} target="_blank" rel="noreferrer" className="social-tile"><s.icon size={20} /><span>{s.label}</span></a>
