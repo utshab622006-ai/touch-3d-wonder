@@ -533,10 +533,12 @@ function Scene({ zone, selected, onSelect, onPhase, yaw, zoom }: {
       <Fence from={[-12, 16]} to={[-3, 18]} /><Fence from={[3, 18]} to={[12, 16]} />
       <Bench position={[-6, 0, 20]} /><Bench position={[6, 0, 20]} />
 
+      <Suspense fallback={null}>
       <ProductMarket neon={neon} onSelect={onSelect} />
       <AssetMall neon={neon} onSelect={onSelect} />
       <UnityHub neon={neon} onSelect={onSelect} />
       <ContactSquare neon={neon} onSelect={onSelect} />
+      </Suspense>
       <Suspense fallback={null}><Mountain neon={neon} /></Suspense>
       <RainbowAura index={selected !== null && selected > 0 ? selected : null} />
 
