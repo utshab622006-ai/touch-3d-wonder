@@ -23,10 +23,10 @@ const socials = [
 ];
 
 const CONTENT = [
-  { tag: "Entrance", title: "Welcome to the village", body: "3D Product Visualization & Game-Ready Asset Artistry | Unity Game Developer. Scroll, drag, or tap a building to explore.", points: ["Blender · Unity · C#", "Stills, motion & real-time", "Desktop and mobile friendly"] },
-  { tag: "Building 01", title: "Product Visualization Center", body: "High-end product renders, ad animations, and photoreal 3D models crafted with studio-grade lighting and materials.", points: ["Fast 1-day turnaround lane", "Repeat client loyalty discount", "Ad-ready motion loops"] },
-  { tag: "Building 02", title: "Game Asset & Unity Arcade", body: "Game-ready props with clean topology, efficient UVs, wireframe previews, and C# Unity gameplay mechanics.", points: ["360° inspectable models", "Wireframe & texel-density previews", "Unity gameplay prototypes"] },
-  { tag: "Station", title: "Contact & Social Hub", body: "Pick a channel and let's build something real together.", points: [] },
+  { tag: "Entrance", title: "Welcome to Mewo City", body: "3D Product Visualization & Game-Ready Asset Artistry | Unity Game Developer. Scroll, drag, or tap a building to explore.", points: ["Blender · Unity · C#", "Stills, motion & real-time", "Desktop and mobile friendly"] },
+  { tag: "Village 01", title: "Product Viz Haven", body: "High-end product renders, ad animations, and photoreal 3D models crafted with studio-grade lighting and materials.", points: ["Fast 1-day turnaround lane", "Repeat client loyalty discount", "Ad-ready motion loops"] },
+  { tag: "Village 02", title: "Game Dev & Unity Alley", body: "Game-ready props with clean topology, efficient UVs, wireframe previews, and C# Unity gameplay mechanics.", points: ["360° inspectable models", "Wireframe & texel-density previews", "Unity gameplay prototypes"] },
+  { tag: "Village 03", title: "Contact & Social Square", body: "Pick a channel and let's build something real together.", points: [] },
 ];
 
 export function PortfolioPage() {
