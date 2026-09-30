@@ -51,11 +51,11 @@ export function PortfolioPage() {
         }}
         onPointerLeave={() => setTitleTilt({ x: 0, y: 0 })}
       >
-        <div className="absolute inset-0"><InteractiveScene /></div>
+        <div className="hero-scene absolute inset-0"><InteractiveScene /></div>
         <div className="hero-shade absolute inset-0 pointer-events-none" />
         <motion.div
           style={{ y: titleY, opacity: titleOpacity }}
-          className="pointer-events-none absolute inset-x-0 top-[14svh] z-10 mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)] px-5 md:top-[19svh] md:grid-cols-[minmax(0,0.98fr)_minmax(27rem,0.82fr)] md:px-10"
+          className="pointer-events-none absolute inset-x-0 top-[12svh] z-10 mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)] px-5 md:top-[17svh] md:grid-cols-[minmax(0,1.2fr)_minmax(24rem,0.65fr)] md:px-10"
         >
           <motion.div
             animate={{ rotateX: titleTilt.y, rotateY: titleTilt.x }}
