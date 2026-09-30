@@ -1,6 +1,6 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Center, Environment, Lightformer, Text, Text3D } from "@react-three/drei";
-import { Bloom, EffectComposer, N8AO, ToneMapping, Vignette } from "@react-three/postprocessing";
+import { Bloom, EffectComposer, ToneMapping, Vignette } from "@react-three/postprocessing";
 import { ToneMappingMode } from "postprocessing";
 import { Suspense, useLayoutEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
@@ -35,7 +35,7 @@ const inDistrict = (x: number, z: number) =>
 /* ---------- Swaying grass ---------- */
 function Grass({ live }: { live: React.MutableRefObject<Live> }) {
   const ref = useRef<THREE.InstancedMesh>(null);
-  const COUNT = 14000;
+  const COUNT = 9000;
   const { geo, mat, uniforms } = useMemo(() => {
     const g = new THREE.ConeGeometry(0.08, 0.9, 3, 1); g.translate(0, 0.45, 0);
     const m = new THREE.MeshStandardMaterial({ roughness: 0.9 });
@@ -294,7 +294,7 @@ function RainbowAura({ index }: { index: number | null }) {
     strength.current = THREE.MathUtils.damp(strength.current, index !== null ? 1 : 0, 3, d);
     mat.uniforms["uTime"]!.value = clock.elapsedTime; mat.uniforms["uAlpha"]!.value = strength.current * 0.75;
     const z = ZONES[last.current]!;
-    if (group.current) { group.current.position.set(z.pos[0], 0, z.pos[2]); group.current.visible = strength.current > 0.01; group.current.rotation.y += d * 0.3; }
+    if (group.current) { group.current.position.set(z.pos[0], 0, z.pos[2]); group.current.rotation.y += d * 0.3; }
     if (light.current) { light.current.color.setHSL((clock.elapsedTime * 0.12) % 1, 1, 0.6); light.current.intensity = strength.current * 60; }
   });
   return (
@@ -503,18 +503,18 @@ function Scene({ zone, selected, onSelect, onPhase, yaw, zoom }: {
     if (amb.current) amb.current.intensity = L.amb * (0.5 + 0.5 * L.dim);
     if (hemi.current) { hemi.current.color.copy(L.sky); hemi.current.groundColor.copy(L.grass); hemi.current.intensity = 0.5 * L.dim; }
     if (ground.current) ground.current.color.copy(L.grass).multiplyScalar(0.85);
-    if (nightLights.current) nightLights.current.visible = L.neon > 1.5;
+    if (nightLights.current) { const k = THREE.MathUtils.clamp((L.neon - 1) / 2, 0, 1); nightLights.current.children.forEach((c, j) => { (c as THREE.PointLight).intensity = k * (j === 4 ? 80 : 25); }); }
 
     const phaseIdx = f > 0.5 ? (i + 1) % PHASES.length : i;
     if (phaseIdx !== lastPhase.current) { lastPhase.current = phaseIdx; onPhase(PHASES[phaseIdx]!.name); }
-    const q = Math.round(L.neon * 5) / 5; if (q !== neon) setNeon(q);
+    const q = Math.round(L.neon * 2) / 2; if (q !== neon) setNeon(q);
   });
 
   return (
     <>
       <ambientLight ref={amb} />
       <hemisphereLight ref={hemi} />
-      <directionalLight ref={sun} castShadow shadow-mapSize={[2048, 2048]} shadow-bias={-0.0004} shadow-normalBias={0.03}
+      <directionalLight ref={sun} castShadow shadow-mapSize={[1024, 1024]} shadow-bias={-0.0004} shadow-normalBias={0.03}
         shadow-camera-left={-45} shadow-camera-right={45} shadow-camera-top={45} shadow-camera-bottom={-45} shadow-camera-far={160} />
       <Environment resolution={64}>
         <Lightformer intensity={1.2} position={[0, 5, 0]} scale={[10, 10, 1]} />
@@ -548,8 +548,7 @@ function Scene({ zone, selected, onSelect, onPhase, yaw, zoom }: {
       <Puddles live={live} />
 
       <EffectComposer multisampling={0}>
-        <N8AO halfRes aoRadius={2} intensity={2.2} distanceFalloff={1} />
-        <Bloom mipmapBlur luminanceThreshold={0.85} intensity={0.9} />
+        <Bloom mipmapBlur luminanceThreshold={0.85} intensity={0.9} resolutionScale={0.5} />
         <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
         <Vignette offset={0.3} darkness={0.55} />
       </EffectComposer>
@@ -564,8 +563,9 @@ export function VillageWorld({ zone, selected, onSelect, onPhase }: { zone: numb
   return (
     <Canvas
       shadows
-      dpr={[1, 1.5]}
-      gl={{ toneMapping: THREE.NoToneMapping, antialias: false }}
+      dpr={[1, 1.25]}
+      performance={{ min: 0.6 }}
+      gl={{ toneMapping: THREE.NoToneMapping, antialias: false, powerPreference: "high-performance", stencil: false }}
       camera={{ position: [0, 18, 52], fov: 48, far: 400 }}
       onPointerDown={(e) => { drag.current = e.clientX; }}
       onPointerMove={(e) => {
