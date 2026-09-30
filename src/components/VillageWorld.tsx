@@ -228,7 +228,7 @@ function ProductHaven({ neon, onSelect }: { neon: number; onSelect: (i: number) 
           <Spinner position={[0, 1.6, 0]}>
             <mesh castShadow>
               {i === 0 ? <torusKnotGeometry args={[0.3, 0.1, 80, 10]} /> : i === 1 ? <icosahedronGeometry args={[0.45, 0]} /> : <capsuleGeometry args={[0.2, 0.5, 4, 10]} />}
-              <meshStandardMaterial color={["#ff5fa2", "#5ad1ff", "#ffcf5a"][i]} metalness={0.7} roughness={0.15} emissive={["#ff5fa2", "#5ad1ff", "#ffcf5a"][i]} emissiveIntensity={neon * 0.2} />
+              <meshStandardMaterial color={["#ff5fa2", "#5ad1ff", "#ffcf5a"][i]!} metalness={0.7} roughness={0.15} emissive={["#ff5fa2", "#5ad1ff", "#ffcf5a"][i]!} emissiveIntensity={neon * 0.2} />
             </mesh>
           </Spinner>
         </group>
@@ -244,12 +244,12 @@ function ArcadeAlley({ neon, onSelect }: { neon: number; onSelect: (i: number) =
   return (
     <District index={2} onSelect={onSelect}>
       {[[-5, -3, 3], [-1.5, -5, 4], [2.5, -4.5, 3], [5.5, -2, 2]].map(([x, z, t], i) => (
-        <House key={i} position={[x!, 0, z!]} rotation={-x! * 0.07} wall={["#2d2547", "#3a2d5c", "#27324f", "#3c2a4a"][i]!} roof="#1b1630" neon={neon} tiers={t!} h={2.2} sign={signs[i]} />
+        <House key={i} position={[x!, 0, z!]} rotation={-x! * 0.07} wall={["#2d2547", "#3a2d5c", "#27324f", "#3c2a4a"][i]!} roof="#1b1630" neon={neon} tiers={t!} h={2.2} sign={signs[i]!} />
       ))}
       {[-3, 0, 3].map((x, i) => (
         <group key={x} position={[x, 0, 2]} rotation-y={Math.PI}>
           <mesh position={[0, 0.9, 0]} castShadow><boxGeometry args={[1, 1.8, 0.8]} /><meshStandardMaterial color="#1c1a2e" /></mesh>
-          <mesh position={[0, 1.25, -0.41]} rotation-y={Math.PI}><planeGeometry args={[0.7, 0.5]} /><meshStandardMaterial color={signs[i]} emissive={signs[i]} emissiveIntensity={0.5 + neon} toneMapped={false} /></mesh>
+          <mesh position={[0, 1.25, -0.41]} rotation-y={Math.PI}><planeGeometry args={[0.7, 0.5]} /><meshStandardMaterial color={signs[i]!} emissive={signs[i]!} emissiveIntensity={0.5 + neon} toneMapped={false} /></mesh>
         </group>
       ))}
       <Spinner position={[0, 2.2, -0.5]} speed={0.5}>
