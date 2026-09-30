@@ -384,3 +384,33 @@
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
+/* Village world UI */
+.village-canvas canvas { touch-action: pan-y; }
+.village-vignette { background: radial-gradient(ellipse at center, transparent 55%, oklch(0.1 0.02 264 / 45%) 100%); }
+.glass {
+  background: oklch(0.13 0.025 258 / 62%);
+  border: 1px solid oklch(0.84 0.16 202 / 22%);
+  border-radius: 1rem;
+  backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: 0 20px 50px -20px oklch(0 0 0 / 60%), 0 0 30px -12px color-mix(in oklab, var(--primary) 50%, transparent);
+}
+.brand-safe { perspective: 700px; }
+.brand-title {
+  font-size: clamp(2.4rem, 6vw, 5.2rem); line-height: 0.88;
+  text-shadow: 0 4px 24px oklch(0 0 0 / 45%);
+  transition: text-shadow .3s, color .3s;
+}
+.brand-safe:hover .brand-title, .brand-safe:active .brand-title {
+  color: var(--primary);
+  text-shadow: 0 0 18px var(--primary), 0 0 42px var(--accent);
+}
+.weather-btn { display: grid; place-items: center; min-width: 2.4rem; height: 2.4rem; padding: 0 .6rem; border-radius: .7rem; color: var(--muted-foreground); transition: all .2s; }
+.weather-btn:hover { color: var(--foreground); }
+.weather-btn.is-active { background: var(--primary); color: var(--primary-foreground); box-shadow: 0 0 18px var(--primary); }
+.zone-dot { position: relative; width: .75rem; height: .75rem; border-radius: 999px; border: 1px solid var(--primary); transition: all .25s; }
+.zone-dot.is-active { background: var(--primary); box-shadow: 0 0 12px var(--primary); }
+.zone-dot span { position: absolute; left: 1.4rem; top: 50%; transform: translateY(-50%); white-space: nowrap; font-size: .7rem; text-transform: uppercase; letter-spacing: .12em; opacity: 0; transition: opacity .2s; }
+.zone-dot:hover span, .zone-dot.is-active span { opacity: 1; }
+.social-tile { display: flex; flex-direction: column; align-items: center; gap: .35rem; padding: .7rem .2rem; border-radius: .75rem; border: 1px solid var(--border); font-size: .6rem; text-transform: uppercase; letter-spacing: .08em; transition: all .2s; }
+.social-tile:hover { border-color: var(--primary); color: var(--primary); box-shadow: 0 0 16px -4px var(--primary); transform: translateY(-2px); }
