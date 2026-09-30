@@ -50,7 +50,7 @@ export function PortfolioPage() {
 
   useEffect(() => { if (window.location.hash === "#contact") goTo(3); }, []);
 
-  const c = CONTENT[zone];
+  const c = CONTENT[zone]!;
 
   return (
     <main className="bg-background text-foreground">
@@ -109,7 +109,7 @@ export function PortfolioPage() {
             <w.icon size={16} />
           </button>
         ))}
-        <button onClick={() => setWeather(WEATHERS[(WEATHERS.findIndex((w) => w.id === weather) + 1) % 4].id)} className="weather-btn text-[10px] font-bold uppercase">Cycle</button>
+        <button onClick={() => setWeather(WEATHERS[(WEATHERS.findIndex((w) => w.id === weather) + 1) % 4]!.id)} className="weather-btn text-[10px] font-bold uppercase">Cycle</button>
       </div>
       <nav className="fixed left-5 top-1/2 z-30 hidden -translate-y-1/2 flex-col gap-3 md:left-10 md:flex">
         {CONTENT.map((z, i) => (
@@ -124,12 +124,12 @@ export function PortfolioPage() {
             <motion.div className="glass relative w-full max-w-lg p-7" initial={{ scale: 0.92, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95 }}
               onClick={(e) => e.stopPropagation()}>
               <button className="icon-control absolute right-4 top-4" onClick={() => setModal(null)} aria-label="Close"><X size={16} /></button>
-              <p className="eyebrow mb-3">{CONTENT[modal].tag}</p>
-              <h3 className="font-display text-3xl font-semibold">{CONTENT[modal].title}</h3>
-              <p className="mt-3 leading-7 text-muted-foreground">{CONTENT[modal].body}</p>
-              {CONTENT[modal].points.length > 0 && (
+              <p className="eyebrow mb-3">{CONTENT[modal]!.tag}</p>
+              <h3 className="font-display text-3xl font-semibold">{CONTENT[modal]!.title}</h3>
+              <p className="mt-3 leading-7 text-muted-foreground">{CONTENT[modal]!.body}</p>
+              {CONTENT[modal]!.points.length > 0 && (
                 <ul className="mt-5 space-y-2">
-                  {CONTENT[modal].points.map((p) => <li key={p} className="flex items-center gap-3 text-sm"><span className="status-dot" />{p}</li>)}
+                  {CONTENT[modal]!.points.map((p) => <li key={p} className="flex items-center gap-3 text-sm"><span className="status-dot" />{p}</li>)}
                 </ul>
               )}
               {modal === 3 && (

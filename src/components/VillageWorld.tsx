@@ -89,7 +89,7 @@ function Rain({ active }: { active: boolean }) {
   useFrame((_, raw) => {
     if (!ref.current || !active) return;
     const d = Math.min(raw, 0.05);
-    const p = geo.attributes.position as THREE.BufferAttribute;
+    const p = geo.attributes['position'] as THREE.BufferAttribute;
     for (let i = 0; i < p.count; i++) {
       let y = p.getY(i) - 22 * d;
       if (y < 0) y = 25;
@@ -109,7 +109,7 @@ function CameraRig({ zone, yaw }: { zone: number; yaw: React.MutableRefObject<nu
   const look = useRef(new THREE.Vector3());
   useFrame((state, raw) => {
     const d = Math.min(raw, 0.05);
-    const z = ZONES[zone];
+    const z = ZONES[zone]!;
     const target = new THREE.Vector3(...z.pos);
     const base = new THREE.Vector3(...z.cam).sub(target);
     base.applyAxisAngle(new THREE.Vector3(0, 1, 0), yaw.current + state.pointer.x * 0.12);
@@ -178,18 +178,18 @@ function Scene({ weather, zone, onSelect, yaw }: { weather: Weather; zone: numbe
         </mesh>
       </group>
 
-      <Building position={ZONES[1].pos} color="#e9e1d2" roof="#3a8fd8" label="Product Viz Center" onSelect={() => onSelect(1)} neon={p.neon} height={3.2}>
+      <Building position={ZONES[1]!.pos} color="#e9e1d2" roof="#3a8fd8" label="Product Viz Center" onSelect={() => onSelect(1)} neon={p.neon} height={3.2}>
         <group ref={spin} position={[2.6, 0.8, 1.8]}>
           <mesh castShadow><torusKnotGeometry args={[0.35, 0.12, 64, 8]} /><meshStandardMaterial color="#ff4fa3" metalness={0.6} roughness={0.2} emissive="#ff4fa3" emissiveIntensity={p.neon * 0.3} /></mesh>
         </group>
       </Building>
-      <Building position={ZONES[2].pos} color="#352a4f" roof="#ff4fa3" label="Unity Arcade" onSelect={() => onSelect(2)} neon={p.neon} height={3.8}>
+      <Building position={ZONES[2]!.pos} color="#352a4f" roof="#ff4fa3" label="Unity Arcade" onSelect={() => onSelect(2)} neon={p.neon} height={3.8}>
         <mesh position={[0, 2.8, 1.52]}><planeGeometry args={[2.4, 0.5]} /><meshStandardMaterial color="#00e5ff" emissive="#00e5ff" emissiveIntensity={p.neon} /></mesh>
         <mesh position={[-2.4, 0.6, 1.2]} castShadow><boxGeometry args={[0.8, 1.2, 0.8]} /><meshStandardMaterial color="#00e5ff" wireframe /></mesh>
       </Building>
 
       {/* Contact hub */}
-      <group position={ZONES[3].pos} onClick={(e) => { e.stopPropagation(); onSelect(3); }}
+      <group position={ZONES[3]!.pos} onClick={(e) => { e.stopPropagation(); onSelect(3); }}
         onPointerOver={() => (document.body.style.cursor = "pointer")} onPointerOut={() => (document.body.style.cursor = "")}>
         <mesh position={[0, 0.2, 0]} receiveShadow castShadow><cylinderGeometry args={[2.6, 2.8, 0.4, 8]} /><meshStandardMaterial color="#b9c2cf" flatShading /></mesh>
         <mesh position={[0, 2.2, 0]} castShadow><cylinderGeometry args={[0.18, 0.18, 4, 6]} /><meshStandardMaterial color="#e05a3a" /></mesh>
@@ -197,10 +197,11 @@ function Scene({ weather, zone, onSelect, yaw }: { weather: Weather; zone: numbe
         {Array.from({ length: 8 }, (_, i) => {
           const a = (i / 8) * Math.PI * 2;
           const cols = ["#ea4335", "#25d366", "#29a9eb", "#1877f2", "#ff0000", "#111111", "#e1306c", "#6e5494"];
+          const col = cols[i]!;
           return (
             <mesh key={i} position={[Math.cos(a) * 2, 0.75, Math.sin(a) * 2]} castShadow>
               <boxGeometry args={[0.55, 0.55, 0.55]} />
-              <meshStandardMaterial color={cols[i]} emissive={cols[i]} emissiveIntensity={p.neon * 0.25} flatShading />
+              <meshStandardMaterial color={col} emissive={col} emissiveIntensity={p.neon * 0.25} flatShading />
             </mesh>
           );
         })}
@@ -210,7 +211,7 @@ function Scene({ weather, zone, onSelect, yaw }: { weather: Weather; zone: numbe
       {trees.map((t, i) => <Tree key={i} position={t.pos} s={t.s} />)}
       {[[-3, 0, 2], [4, 0, 1], [-4, 0, -6], [5, 0, -8]].map((pos, i) => <Tree key={`i${i}`} position={pos as [number, number, number]} s={0.7} />)}
       {weather === "night" && [[-3, 0, 3], [3, 0, 3], [-2, 0, -5], [2, 0, -5]].map((pos, i) => (
-        <pointLight key={i} position={[pos[0], 2, pos[2]]} color={i % 2 ? "#00e5ff" : "#ff4fa3"} intensity={6} distance={8} />
+        <pointLight key={i} position={[pos[0]!, 2, pos[2]!]} color={i % 2 ? "#00e5ff" : "#ff4fa3"} intensity={6} distance={8} />
       ))}
       <Rain active={weather === "rain"} />
     </>
